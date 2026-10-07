@@ -775,4 +775,95 @@
                 const topBudget = Object.keys(budgetCounts).length ? Object.keys(budgetCounts).reduce((a, b) => budgetCounts[a] > budgetCounts[b] ? a : b) : '-';
                 document.getElementById('statTicket').innerText = topBudget;
             } else {
-                document.getElementById('statDigital').innerText =
+                document.getElementById('statDigital').innerText = '0%';
+                document.getElementById('statTicket').innerText = '-';
+            }
+
+            const tbody = document.getElementById('submissionsTableBody');
+            tbody.innerHTML = '';
+            if (surveyData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">No hay registros en Supabase todavía.</td></tr>`;
+            } else {
+                surveyData.forEach(item => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-darkBg/50">
+                            <td class="p-3 font-medium text-white">${item.sector || 'N/A'}</td>
+                            <td class="p-3">${item.estado_digital || 'N/A'}</td>
+                            <td class="p-3 truncate max-w-[150px]">${item.servicios_interes || 'N/A'}</td>
+                            <td class="p-3">${item.presupuesto || 'N/A'}</td>
+                            <td class="p-3">${item.barrera_contratar || 'N/A'}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            renderCharts();
+        }
+
+        function renderCharts() {
+            const sectorCounts = {};
+            surveyData.forEach(i => { if(i.sector) sectorCounts[i.sector] = (sectorCounts[i.sector] || 0) + 1; });
+
+            const serviceCounts = {};
+            surveyData.forEach(i => {
+                if(i.servicios_interes) {
+                    i.servicios_interes.split(', ').forEach(s => {
+                        serviceCounts[s] = (serviceCounts[s] || 0) + 1;
+                    });
+                }
+            });
+
+            const barrierCounts = {};
+            surveyData.forEach(i => { if(i.barrera_contratar) barrierCounts[i.barrera_contratar] = (barrierCounts[i.barrera_contratar] || 0) + 1; });
+
+            const budgetCounts = {};
+            surveyData.forEach(i => { if(i.presupuesto) budgetCounts[i.presupuesto] = (budgetCounts[i.presupuesto] || 0) + 1; });
+
+            if (chartSectorInstance) chartSectorInstance.destroy();
+            if (chartServiceInstance) chartServiceInstance.destroy();
+            if (chartBarrierInstance) chartBarrierInstance.destroy();
+            if (chartBudgetInstance) chartBudgetInstance.destroy();
+
+            const ctxSectors = document.getElementById('chartSectors').getContext('2d');
+            chartSectorInstance = new Chart(ctxSectors, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(sectorCounts).length ? Object.keys(sectorCounts) : ['Sin datos'],
+                    datasets: [{ data: Object.values(sectorCounts).length ? Object.values(sectorCounts) : [0], backgroundColor: '#0ea5e9', borderRadius: 8 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', precision: 0 }, grid: { color: '#1e293b' } } } }
+            });
+
+            const ctxServices = document.getElementById('chartServices').getContext('2d');
+            chartServiceInstance = new Chart(ctxServices, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(serviceCounts).length ? Object.keys(serviceCounts) : ['Sin datos'],
+                    datasets: [{ data: Object.values(serviceCounts).length ? Object.values(serviceCounts) : [1], backgroundColor: ['#0ea5e9', '#6366f1', '#10b981', '#f59e0b'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 9 } } } } }
+            });
+
+            const ctxBarriers = document.getElementById('chartBarriers').getContext('2d');
+            chartBarrierInstance = new Chart(ctxBarriers, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(barrierCounts).length ? Object.keys(barrierCounts) : ['Sin datos'],
+                    datasets: [{ data: Object.values(barrierCounts).length ? Object.values(barrierCounts) : [0], backgroundColor: '#f59e0b', borderRadius: 8 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', precision: 0 }, grid: { color: '#1e293b' } } } }
+            });
+
+            const ctxBudgets = document.getElementById('chartBudgets').getContext('2d');
+            chartBudgetInstance = new Chart(ctxBudgets, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(budgetCounts).length ? Object.keys(budgetCounts) : ['Sin datos'],
+                    datasets: [{ data: Object.values(budgetCounts).length ? Object.values(budgetCounts) : [1], backgroundColor: ['#10b981', '#0ea5e9', '#6366f1', '#ec4899'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 9 } } } } }
+            });
+        }
+    </script>
+</body>
+</html>
