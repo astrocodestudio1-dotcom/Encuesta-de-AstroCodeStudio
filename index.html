@@ -2,8 +2,12 @@
 <html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroCode Studio | B2B Research & Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AstroCode Studio | Plataforma B2B y Validación de Mercado</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Plataforma inteligente de validación de mercado B2B, desarrollo web, UI/UX y branding digital de AstroCode Studio.">
+    <meta name="keywords" content="desarrollo web, software, marketing digital, branding, UI/UX, B2B, México">
+    <meta name="author" content="AstroCode Studio">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -37,13 +41,18 @@
     <!-- FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #05070f; color: #f1f5f9; }
+        body { background-color: #05070f; color: #f1f5f9; overflow-x: hidden; }
+        #spaceCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
+        .app-content { position: relative; z-index: 10; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-black">
 
+    <!-- Lienzo Espacial con Movimiento (Canvas Animado) -->
+    <canvas id="spaceCanvas"></canvas>
+
     <!-- Navegación Superior -->
-    <header class="sticky top-0 z-50 bg-[#05070f]/90 backdrop-blur-md border-b border-borderCol">
+    <header class="sticky top-0 z-50 bg-[#05070f]/80 backdrop-blur-md border-b border-borderCol app-content">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
@@ -59,11 +68,11 @@
             </div>
 
             <div class="flex items-center space-x-2 bg-cardBg p-1.5 rounded-2xl border border-borderCol">
-                <button onclick="switchTab('survey')" id="btn-survey" class="flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow-md">
+                <button onclick="switchTab('survey')" id="btn-survey" class="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow-md">
                     <i class="fa-solid fa-file-lines"></i>
-                    <span class="hidden sm:inline">Formulario Activo</span>
+                    <span class="hidden sm:inline">Formulario</span>
                 </button>
-                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white">
                     <i class="fa-solid fa-chart-pie"></i>
                     <span class="hidden sm:inline">Panel Analítico</span>
                 </button>
@@ -72,7 +81,7 @@
     </header>
 
     <!-- Contenido Principal -->
-    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 app-content">
 
         <!-- ================= VISTA DE ENCUESTA Y PAQUETES ================= -->
         <section id="view-survey" class="space-y-8">
@@ -90,7 +99,7 @@
             <!-- Visualización de Paquetes AstroCode Studio -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Paquete Básico -->
-                <div class="bg-cardBg border border-borderCol p-8 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+                <div class="bg-cardBg border border-borderCol p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden">
                     <div>
                         <div class="text-center pb-6 border-b border-borderCol">
                             <h3 class="text-lg font-bold text-white uppercase tracking-wider mb-2">Básico</h3>
@@ -113,7 +122,7 @@
                 </div>
 
                 <!-- Paquete Pro (Recomendado) -->
-                <div class="bg-cardBg border-2 border-cyan-500 p-8 rounded-3xl shadow-2xl flex flex-col justify-between relative overflow-hidden">
+                <div class="bg-cardBg border-2 border-cyan-500 p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute top-4 right-4 bg-cyan-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-md">Recomendado</div>
                     <div>
                         <div class="text-center pb-6 border-b border-borderCol">
@@ -388,10 +397,10 @@
                 <!-- Botonera del Dashboard con Exportar a Excel -->
                 <div class="flex flex-wrap items-center gap-2">
                     <button onclick="exportToExcel()" class="px-4 py-2.5 bg-emerald-500 text-slate-950 rounded-xl text-xs font-bold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20">
-                        <i class="fa-solid fa-file-excel mr-2"></i> Exportar a Excel
+                        <i class="fa-solid fa-file-excel mr-2"></i> Excel
                     </button>
                     <button onclick="refreshData()" class="px-4 py-2.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-xl text-xs font-bold hover:bg-cyan-500/20 transition-all">
-                        <i class="fa-solid fa-rotate mr-2"></i> Actualizar Datos
+                        <i class="fa-solid fa-rotate mr-2"></i> Actualizar
                     </button>
                     <button onclick="lockDashboard()" class="px-4 py-2.5 bg-slate-800 text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-700 transition-all">
                         <i class="fa-solid fa-lock mr-2"></i> Bloquear
@@ -433,9 +442,9 @@
                 </div>
                 <div class="bg-cardBg border border-borderCol p-5 rounded-2xl shadow-xl flex items-center justify-between">
                     <div>
-                        <p class="text-[10px] text-slate-400 uppercase font-bold">Propensión de Contrato</p>
+                        <p class="text-[10px] text-slate-400 uppercase font-bold">Propensión</p>
                         <h3 id="statPropension" class="text-2xl font-black text-cyan-400 mt-0.5">92%</h3>
-                        <p class="text-[10px] text-cyan-300 mt-1">Alta viabilidad comercial</p>
+                        <p class="text-[10px] text-cyan-300 mt-1">Alta viabilidad</p>
                     </div>
                     <div class="w-10 h-10 bg-cyan-500/10 text-cyan-400 rounded-xl flex items-center justify-center">
                         <i class="fa-solid fa-bolt text-sm"></i>
@@ -499,12 +508,58 @@
     </main>
 
     <!-- Footer -->
-    <footer class="mt-auto border-t border-borderCol py-6 text-center text-xs text-slate-500">
+    <footer class="mt-auto border-t border-borderCol py-6 text-center text-xs text-slate-500 app-content">
         <p>AstroCode Studio © 2026. Sistema de Inteligencia de Mercado B2B.</p>
     </footer>
 
-    <!-- Lógica de la Aplicación con Supabase -->
+    <!-- Lógica de la Aplicación y Canvas Espacial -->
     <script>
+        // Canvas Animado Espacial con Estrellas en Movimiento
+        const canvas = document.getElementById('spaceCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let stars = [];
+        const numStars = 100;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                speed: Math.random() * 0.5 + 0.1,
+                alpha: Math.random()
+            });
+        }
+
+        function animateSpace() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffffff';
+            
+            stars.forEach(star => {
+                ctx.globalAlpha = star.alpha;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                star.y -= star.speed;
+                if (star.y < 0) {
+                    star.y = canvas.height;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+
+            requestAnimationFrame(animateSpace);
+        }
+        animateSpace();
+
         // Configuración de Supabase
         const SUPABASE_URL = 'https://xlduflbyxepfhrfopzux.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_DQ2jS3YEX0-Nv_i3Fp9WQw_sJbh0yNb';
@@ -549,13 +604,13 @@
             if (tab === 'survey') {
                 viewSurvey.classList.remove('hidden');
                 viewDashboard.classList.add('hidden');
-                btnSurvey.className = "flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow-md";
-                btnDashboard.className = "flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white";
+                btnSurvey.className = "flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow-md";
+                btnDashboard.className = "flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white";
             } else if (tab === 'dashboard' && isAdminLoggedIn) {
                 viewSurvey.classList.add('hidden');
                 viewDashboard.classList.remove('hidden');
-                btnDashboard.className = "flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow-md";
-                btnSurvey.className = "flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white";
+                btnDashboard.className = "flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow-md";
+                btnSurvey.className = "flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white";
                 fetchAndRenderDashboard();
             }
         }
@@ -580,7 +635,7 @@
             switchTab('survey');
         }
 
-        // Enviar encuesta directamente a Supabase con los nombres de columnas correctos
+        // Enviar encuesta a Supabase
         async function submitSurvey(e) {
             e.preventDefault();
 
@@ -786,4 +841,16 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', precision: 0 }, grid: { color: '#1e293b' } } } }
             });
 
-            const ctxBudgets = document.getElementById
+            const ctxBudgets = document.getElementById('chartBudgets').getContext('2d');
+            chartBudgetInstance = new Chart(ctxBudgets, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(budgetCounts).length ? Object.keys(budgetCounts) : ['Sin datos'],
+                    datasets: [{ data: Object.values(budgetCounts).length ? Object.values(budgetCounts) : [1], backgroundColor: ['#10b981', '#0ea5e9', '#6366f1', '#ec4899'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 9 } } } } }
+            });
+        }
+    </script>
+</body>
+</html>
