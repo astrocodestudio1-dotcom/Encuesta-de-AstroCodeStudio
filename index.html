@@ -786,16 +786,4 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', precision: 0 }, grid: { color: '#1e293b' } } } }
             });
 
-            const ctxBudgets = document.getElementById('chartBudgets').getContext('2d');
-            chartBudgetInstance = new Chart(ctxBudgets, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(budgetCounts).length ? Object.keys(budgetCounts) : ['Sin datos'],
-                    datasets: [{ data: Object.values(budgetCounts).length ? Object.values(budgetCounts) : [1], backgroundColor: ['#10b981', '#0ea5e9', '#6366f1', '#ec4899'] }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 9 } } } } }
-            });
-        }
-    </script>
-</body>
-</html>
+            const ctxBudgets = document.getElementById
