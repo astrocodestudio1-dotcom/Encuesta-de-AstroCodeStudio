@@ -580,7 +580,7 @@
             switchTab('survey');
         }
 
-        // Enviar encuesta directamente a Supabase (Tabla: respuestas_astrocode)
+        // Enviar encuesta directamente a Supabase con los nombres de columnas correctos
         async function submitSurvey(e) {
             e.preventDefault();
 
@@ -593,24 +593,24 @@
             }
 
             const newEntry = {
-                nombre: document.getElementById('nombre').value,
-                empresa: document.getElementById('empresa').value,
+                nombre_contacto: document.getElementById('nombre').value,
+                nombre_empresa: document.getElementById('empresa').value,
                 sector: document.getElementById('sector').value,
                 antiguedad: document.getElementById('antiguedad').value,
-                presenciaDigital: document.getElementById('presenciaDigital').value,
-                canalCaptacion: document.getElementById('canalCaptacion').value,
-                tieneBranding: document.getElementById('tieneBranding').value,
-                ventasOnline: document.getElementById('ventasOnline').value,
-                serviciosInteres: serviciosArray.join(', '),
-                tiempoEntregaPref: document.getElementById('tiempoEntregaPref').value,
-                paqueteSeleccionado: document.getElementById('paqueteSeleccionado').value,
-                importanciaRediseño: document.getElementById('importanciaRediseño').value,
-                estiloVisual: document.getElementById('estiloVisual').value,
-                barreraAgencia: document.getElementById('barreraAgencia').value,
+                estado_digital: document.getElementById('presenciaDigital').value,
+                canal_actual: document.getElementById('canalCaptacion').value,
+                logotipo: document.getElementById('tieneBranding').value,
+                ventas_linea: document.getElementById('ventasOnline').value,
+                servicios_interes: serviciosArray.join(', '),
+                tiempo_espera: document.getElementById('tiempoEntregaPref').value,
+                paquete: document.getElementById('paqueteSeleccionado').value,
+                rediseño_importancia: document.getElementById('importanciaRediseño').value,
+                estilo_visual: document.getElementById('estiloVisual').value,
+                barrera_contratar: document.getElementById('barreraAgencia').value,
                 presupuesto: document.getElementById('presupuesto').value,
-                modeloContratacion: document.getElementById('modeloContratacion').value,
-                asesoriaGratis: document.getElementById('asesoriaGratis').value,
-                contacto: document.getElementById('contacto').value
+                modelo_contratacion: document.getElementById('modeloContratacion').value,
+                asesoria_gratis: document.getElementById('asesoriaGratis').value,
+                contacto_directo: document.getElementById('contacto').value
             };
 
             const { data, error } = await _supabase
@@ -656,24 +656,24 @@
             const detailedRows = surveyData.map((item, index) => ({
                 "ID": index + 1,
                 "Fecha Registro": item.created_at ? new Date(item.created_at).toLocaleString() : 'N/A',
-                "Responsable": item.nombre,
-                "Empresa": item.empresa,
+                "Responsable": item.nombre_contacto,
+                "Empresa": item.nombre_empresa,
                 "Sector": item.sector,
                 "Antigüedad": item.antiguedad,
-                "Presencia Digital": item.presenciaDigital,
-                "Canal de Captación": item.canalCaptacion,
-                "Branding Actual": item.tieneBranding,
-                "Ventas Online": item.ventasOnline,
-                "Servicios de Interés": item.serviciosInteres,
-                "Tiempo Entrega Preferido": item.tiempoEntregaPref,
-                "Paquete Seleccionado": item.paqueteSeleccionado,
-                "Importancia Rediseño": item.importanciaRediseño,
-                "Estilo Visual": item.estiloVisual,
-                "Barrera de Contratación": item.barreraAgencia,
+                "Presencia Digital": item.estado_digital,
+                "Canal de Captación": item.canal_actual,
+                "Branding Actual": item.logotipo,
+                "Ventas Online": item.ventas_linea,
+                "Servicios de Interés": item.servicios_interes,
+                "Tiempo Entrega Preferido": item.tiempo_espera,
+                "Paquete Seleccionado": item.paquete,
+                "Importancia Rediseño": item.rediseño_importancia,
+                "Estilo Visual": item.estilo_visual,
+                "Barrera de Contratación": item.barrera_contratar,
                 "Presupuesto (MXN)": item.presupuesto,
-                "Modelo de Contratación": item.modeloContratacion,
-                "Solicita Asesoría": item.asesoriaGratis,
-                "Contacto Directo": item.contacto
+                "Modelo de Contratación": item.modelo_contratacion,
+                "Solicita Asesoría": item.asesoria_gratis,
+                "Contacto Directo": item.contacto_directo
             }));
 
             const totalEmpresas = surveyData.length;
@@ -696,7 +696,7 @@
             document.getElementById('statTotal').innerText = surveyData.length;
             
             if (surveyData.length > 0) {
-                const digitalCount = surveyData.filter(i => i.presenciaDigital && (i.presenciaDigital.includes('Redes') || i.presenciaDigital.includes('Sin'))).length;
+                const digitalCount = surveyData.filter(i => i.estado_digital && (i.estado_digital.includes('Redes') || i.estado_digital.includes('Sin'))).length;
                 const digitalPct = Math.round((digitalCount / surveyData.length) * 100);
                 document.getElementById('statDigital').innerText = digitalPct + '%';
 
@@ -720,10 +720,10 @@
                     tbody.innerHTML += `
                         <tr class="hover:bg-darkBg/50">
                             <td class="p-3 font-medium text-white">${item.sector || 'N/A'}</td>
-                            <td class="p-3">${item.presenciaDigital || 'N/A'}</td>
-                            <td class="p-3 truncate max-w-[150px]">${item.serviciosInteres || 'N/A'}</td>
+                            <td class="p-3">${item.estado_digital || 'N/A'}</td>
+                            <td class="p-3 truncate max-w-[150px]">${item.servicios_interes || 'N/A'}</td>
                             <td class="p-3">${item.presupuesto || 'N/A'}</td>
-                            <td class="p-3">${item.barreraAgencia || 'N/A'}</td>
+                            <td class="p-3">${item.barrera_contratar || 'N/A'}</td>
                         </tr>
                     `;
                 });
@@ -738,15 +738,15 @@
 
             const serviceCounts = {};
             surveyData.forEach(i => {
-                if(i.serviciosInteres) {
-                    i.serviciosInteres.split(', ').forEach(s => {
+                if(i.servicios_interes) {
+                    i.servicios_interes.split(', ').forEach(s => {
                         serviceCounts[s] = (serviceCounts[s] || 0) + 1;
                     });
                 }
             });
 
             const barrierCounts = {};
-            surveyData.forEach(i => { if(i.barreraAgencia) barrierCounts[i.barreraAgencia] = (barrierCounts[i.barreraAgencia] || 0) + 1; });
+            surveyData.forEach(i => { if(i.barrera_contratar) barrierCounts[i.barrera_contratar] = (barrierCounts[i.barrera_contratar] || 0) + 1; });
 
             const budgetCounts = {};
             surveyData.forEach(i => { if(i.presupuesto) budgetCounts[i.presupuesto] = (budgetCounts[i.presupuesto] || 0) + 1; });
